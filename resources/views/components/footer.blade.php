@@ -1,7 +1,7 @@
 <footer class="bg-gray-800">
     <div class="mx-auto max-w-7xl px-6 pt-16 pb-24 ldj ldr lea lec led len let leu">
         <div class="lex ley lez">
-            <div class="ldv">
+            <div class="flex">
                 <img alt="Company name"
                     src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&amp;shade=500" class="ldq">
                 <p class="lee leg leh">Making the world a better place through constructing elegant hierarchies.</p>
