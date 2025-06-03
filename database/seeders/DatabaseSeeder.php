@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             EmployeeSeeder::class,
             CarBrandSeeder::class,
             CarTypeSeeder::class,
+            CarMovementSeeder::class,
         ]);
     }
 }
