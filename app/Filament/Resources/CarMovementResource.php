@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
@@ -195,7 +196,7 @@ class CarMovementResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                DateRangeFilter::make('date'),
             ])
             ->headerActions([
                 ExportAction::make()->exports([
@@ -204,16 +205,6 @@ class CarMovementResource extends Resource
                         ->askForWriterType()
                         ->withFilename(date('Ymd') . '_CarMovements')
                 ]),
-            ])
-            ->filters([
-                Tables\Filters\SelectFilter::make('Year')
-                    ->options(function () {
-                        return \App\Models\CarMovement::selectRaw('YEAR(date) as year')
-                            ->distinct()
-                            ->orderBy('year', 'desc')
-                            ->pluck('year', 'year')
-                            ->toArray();
-                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
