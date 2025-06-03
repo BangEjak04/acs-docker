@@ -13,6 +13,9 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class CarMovementResource extends Resource
 {
@@ -137,6 +140,11 @@ class CarMovementResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
+                Tables\Columns\TextColumn::make('code')
+                    ->label('Code')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('color')
                     ->label('Color')
                     ->searchable()
@@ -190,8 +198,22 @@ class CarMovementResource extends Resource
                 //
             ])
             ->headerActions([
-                Tables\Actions\ExportAction::make()
-                    ->exporter(\App\Filament\Exports\CarMovementExporter::class),
+                ExportAction::make()->exports([
+                    ExcelExport::make()
+                        ->fromTable()
+                        ->askForWriterType()
+                        ->withFilename(date('Ymd') . '_CarMovements')
+                ]),
+            ])
+            ->filters([
+                Tables\Filters\SelectFilter::make('Year')
+                    ->options(function () {
+                        return \App\Models\CarMovement::selectRaw('YEAR(date) as year')
+                            ->distinct()
+                            ->orderBy('year', 'desc')
+                            ->pluck('year', 'year')
+                            ->toArray();
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -199,8 +221,12 @@ class CarMovementResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ExportBulkAction::make()
-                        ->exporter(\App\Filament\Exports\CarMovementExporter::class),
+                    ExportBulkAction::make()->exports([
+                        ExcelExport::make()
+                            ->fromTable()
+                            ->askForWriterType()
+                            ->withFilename(date('Ymd') . '_CarMovements')
+                    ]),
                 ]),
             ]);
     }
