@@ -4,7 +4,7 @@
         <div
             class="container mx-auto flex flex-col md:flex-row items-start md:items-center justify-between w-10/12 px-4 pt-24 relative">
             <div class="text-left text-white">
-                <h1 class="text-5xl font-bold leading-tight">Delivering Trust,</h1>
+                <h1 class="text-5xl font-bold leading-tight">RIZKIIII,</h1>
                 <h1 class="text-5xl font-bold leading-tight">
                     <span class="text-yellow-400">Connecting</span> the Future
                 </h1>
