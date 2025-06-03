@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CarMovementResource\Widgets;
 
+use App\Models\CarMovement;
 use Filament\Widgets\ChartWidget;
 
 class CarBrandOverview extends ChartWidget
@@ -10,14 +11,21 @@ class CarBrandOverview extends ChartWidget
 
     protected function getData(): array
     {
+        $data = CarMovement::selectRaw('car_brands.name as brand, COUNT(*) as total')
+            ->join('car_types', 'car_movements.car_type_id', '=', 'car_types.id')
+            ->join('car_brands', 'car_types.car_brand_id', '=', 'car_brands.id')
+            ->groupBy('car_brands.name')
+            ->orderBy('total', 'desc')
+            ->pluck('total', 'brand');
+
         return [
             'datasets' => [
                 [
-                    'label' => 'Blog posts created',
-                    'data' => [0, 10, 5, 2, 21, 32, 45, 74, 65, 45, 77, 89],
+                    'label' => 'Jumlah Mobil per Brand',
+                    'data' => array_values($data->toArray()),
                 ],
             ],
-            'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            'labels' => array_keys($data->toArray()),
         ];
     }
 
